@@ -102,11 +102,11 @@ namespace Czar.Cms.Core.Extensions
                     strGetAllColumns = 
                     "select column_name as ColName, " +
                    " column_default as DefaultValue," +
-                   " IF(extra = 'auto_increment','TRUE','FALSE') as IsIdentity," +
-                   " IF(is_nullable = 'YES','TRUE','FALSE') as IsNullable," +
+                   " IF(extra = 'auto_increment','TRUE','FALSE') as Identity," +
+                   " IF(is_nullable = 'YES','TRUE','FALSE') as Nullable," +
                    " DATA_TYPE as ColumnType," +
                    " CHARACTER_MAXIMUM_LENGTH as ColumnLength," +
-                   " IF(COLUMN_KEY = 'PRI','TRUE','FALSE') as IsPrimaryKey," +
+                   " IF(COLUMN_KEY = 'PRI','TRUE','FALSE') as PrimaryKey," +
                    " COLUMN_COMMENT as Comment " +
                    $" from information_schema.columns where table_schema = '{dbConnection.Database}' and table_name = '{tableName}'";
                     break;

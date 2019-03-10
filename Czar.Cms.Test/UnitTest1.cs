@@ -1,7 +1,6 @@
 using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-//using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Czar.Cms.Core.Options;
 using Czar.Cms.Core.CodeGenerator;
 using Czar.Cms.Core.Models;
@@ -11,16 +10,16 @@ namespace Czar.Cms.Test
 {
     public class UnitTest1
     {
-        
+
         public IServiceProvider BuildService()
         {
             var services = new ServiceCollection();
-            services.Configure<CodeGenerateOption>(options => 
+            services.Configure<CodeGenerateOption>(options =>
             {
-                options.ConnectionString = "server=localhost;user=root;password=admin;database=coretest";
+                options.ConnectionString = "server=localhost;user=root;password=toor;database=coretest";
                 options.DbType = DatabaseType.MySQL.ToString();
                 options.Author = "复制自yilezhu";
-                options.OutputPath = @"D:\Workspace\VS2017\Czar\Czar.Cms\Czar.Cms.Models";
+                options.OutputPath = @"E:\Workspace\VSStudio\Czar.cms\Czar.Cms.Models";
                 options.ModelsNamespace = "Czar.Cms.Models";
                 //options.IRepositoryNamespace = "Czar.Cms.IRepository";//仓储接口命名空间
                 //options.RepositoryNamespace = "Czar.Cms.Repository.SqlServer";//仓储命名空间
@@ -46,8 +45,9 @@ namespace Czar.Cms.Test
         {
             var serviceProvider = BuildService();
             var codeGenerator = serviceProvider.GetRequiredService<CodeGenerator>();
-            codeGenerator.GenerateTemplateCodesFromDatabase(true);
+            codeGenerator.GenerateTemplateCodesFromDatabase(true); 
             Assert.Equal("MySQL", DatabaseType.MySQL.ToString(), ignoreCase: true);
         }
     }
+
 }

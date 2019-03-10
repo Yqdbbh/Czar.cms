@@ -78,7 +78,8 @@ namespace Czar.Cms.Core.CodeGenerator
                 return;
 
             //主键类型
-            var pkTypeName = dbTable.Columns.First(m => m.PrimaryKey).CSharpType;
+            //下面好像没用到，而且测试结果不通过
+            //string pkTypeName = dbTable.Columns.FirstOrDefault(m => m.PrimaryKey).CSharpType;
             var sb = new StringBuilder();
             foreach (var col in dbTable.Columns)
             {
@@ -88,7 +89,7 @@ namespace Czar.Cms.Core.CodeGenerator
 
             //读取模板
             var content = ReadTemplate("ModelTemplate.txt");
-            content = content.Replace("{GeneratorTime}", DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss"))
+            content = content.Replace("{GeneratorTime}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))
                 .Replace("{ModelsNamespace}", _option.ModelsNamespace)
                 .Replace("{Author}", _option.Author)
                 .Replace("{Comment}", dbTable.TableComment)
