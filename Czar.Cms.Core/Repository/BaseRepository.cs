@@ -3,6 +3,8 @@ using Dapper;
 using System;
 using System.Collections.Generic;
 using System.Data;
+//using MySql.Data;
+//using MySql.Data.MySqlClient;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,6 +17,7 @@ namespace Czar.Cms.Core.Repository
     /// <typeparam name="TKey"></typeparam>
     public class BaseRepository<T, TKey> : IBaseRepository<T, TKey> where T : class
     {
+        
         protected DbOption _dbOption;
         protected IDbConnection _dbConnection;
 

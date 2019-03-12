@@ -1,13 +1,13 @@
-﻿/**
+/**
 *┌──────────────────────────────────────────────────────────────┐
-*│　描    述：{Comment}接口实现                                                    
-*│　作    者：{Author}                                            
+*│　描    述：接口实现                                                    
+*│　作    者：复制自yilezhu                                            
 *│　版    本：1.0    模板代码自动生成                                                
-*│　创建时间：{GeneratorTime}                             
+*│　创建时间：2019-03-12 21:42:14                             
 *└──────────────────────────────────────────────────────────────┘
 *┌──────────────────────────────────────────────────────────────┐
-*│　命名空间： {RepositoryNamespace}                                  
-*│　类    名： {ModelName}Repository                                      
+*│　命名空间： Czar.Cms.Repository.SqlServer                                  
+*│　类    名： managerlogRepository                                      
 *└──────────────────────────────────────────────────────────────┘
 */
 using Czar.Cms.Core.DbHelper;
@@ -20,11 +20,11 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
 
-namespace {RepositoryNamespace}
+namespace Czar.Cms.Repository.SqlServer
 {
-    public class {ModelName}Repository:BaseRepository<{ModelName},{KeyTypeName}>, I{ModelName}Repository
+    public class managerlogRepository:BaseRepository<managerlog,Int32>, ImanagerlogRepository
     {
-        public {ModelName}Repository(IOptionsSnapshot<DbOption> options)
+        public managerlogRepository(IOptionsSnapshot<DbOption> options)
         {
             _dbOption =options.Get("CzarCms");
             if (_dbOption == null)
@@ -36,7 +36,7 @@ namespace {RepositoryNamespace}
 
 		public int DeleteLogical(int[] ids)
         {
-            string sql = "update {ModelName} set IsDelete=1 where Id in @Ids";
+            string sql = "update managerlog set IsDelete=1 where Id in @Ids";
             return _dbConnection.Execute(sql, new
             {
                 Ids = ids
@@ -45,7 +45,7 @@ namespace {RepositoryNamespace}
 
         public async Task<int> DeleteLogicalAsync(int[] ids)
         {
-            string sql = "update {ModelName} set IsDelete=1 where Id in @Ids";
+            string sql = "update managerlog set IsDelete=1 where Id in @Ids";
             return await _dbConnection.ExecuteAsync(sql, new
             {
                 Ids = ids

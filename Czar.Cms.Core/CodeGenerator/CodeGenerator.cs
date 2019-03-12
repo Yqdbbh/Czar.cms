@@ -59,7 +59,7 @@ namespace Czar.Cms.Core.CodeGenerator
                     {
                         var keyType = table.Columns.First(m => m.PrimaryKey).CSharpType;
                         GenerateIRepository(table, keyType, coveredExsited);
-                        //GenerateRepository(table, keyType, coveredExsited);
+                        GenerateRepository(table, keyType, coveredExsited);
                     }
                 }
             }
@@ -201,7 +201,7 @@ namespace Czar.Cms.Core.CodeGenerator
                 .Replace("{RepositoryNamespace}", _option.RepositoryNamespace)
                 .Replace("{ModelName}", table.TableName)
                 .Replace("{KeyTypeName}", keyTypeName);
-            WriteAndSave(content, fullPath);
+            WriteAndSave(fullPath, content);
         }
 
         /// <summary>
