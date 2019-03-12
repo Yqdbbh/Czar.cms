@@ -1,53 +1,35 @@
 /**
 *┌──────────────────────────────────────────────────────────────┐
-*│　描    述：角色权限表                                                    
+*│　描    述：文章分类                                                    
 *│　作    者：复制自yilezhu                                              
 *│　版    本：1.0   模板代码自动生成                                              
 *│　创建时间：2019-03-12 18:05:41                            
 *└──────────────────────────────────────────────────────────────┘
 *┌──────────────────────────────────────────────────────────────┐
-*│　命名空间: Czar.Cms.Models                                  
-*│　类    名：rolepermission                                     
+*│　命名空间: Czar.Cms.IRepository                                  
+*│　接口名称：IarticlecategoryRepository                                     
 *└──────────────────────────────────────────────────────────────┘
 */
+using Czar.Cms.Core.Repository;
+using Czar.Cms.Models;
 using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Threading.Tasks;
 
-namespace Czar.Cms.Models
+namespace Czar.Cms.IRepository
 {
-	/// <summary>
-	/// 复制自yilezhu
-	/// 2019-03-12 18:05:41
-	/// 角色权限表
-	/// </summary>
-	[Table("rolepermission")]
-	public class rolepermission
+	public interface IarticlecategoryRepository:IBaseRepository<articlecategory,Int32>
 	{
 		/// <summary>
-		/// 主键
-		/// <summary>
-		[Key]
-		public Int32 Id{ get; set;}
-
-		/// <summary>
-		/// 菜单主键
-		/// <summary>
-		[Required]
-		public Int32 MENUID { get; set;}
-
-		/// <summary>
-		/// 操作类型（功能权限）
-		/// <summary>
-		[MaxLength(128)]
-		public String PERMISSION { get; set;}
-
-		/// <summary>
-		/// 角色主键
-		/// <summary>
-		[Required]
-		public Int32 ROLEID { get; set;}
-
-
+        /// 逻辑删除返回影响的行数
+        /// </summary>
+        /// <param name="ids">需要删除的主键数组</param>
+        /// <returns>影响的行数</returns>
+        Int32 DeleteLogical(Int32[] ids);
+        /// <summary>
+        /// 逻辑删除返回影响的行数（异步操作）
+        /// </summary>
+        /// <param name="ids">需要删除的主键数组</param>
+        /// <returns>影响的行数</returns>
+        Task<Int32> DeleteLogicalAsync(Int32[] ids);
 	}
 }

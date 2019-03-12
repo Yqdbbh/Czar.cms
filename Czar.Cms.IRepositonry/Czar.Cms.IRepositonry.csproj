@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Czar.Cms.Core\Czar.Cms.Core.csproj" />
     <ProjectReference Include="..\Czar.Cms.Models\Czar.Cms.Models.csproj" />
   </ItemGroup>
 
