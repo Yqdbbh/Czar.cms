@@ -28,5 +28,25 @@ namespace Czar.Cms.Core.Options
         /// 实体命名空间
         /// </summary>
         public string ModelsNamespace { get; set; }
+
+        /// <summary>
+        /// 仓储层接口命名空间
+        /// </summary>
+        public string IRepositoryNamespace { get; set; }
+
+        /// <summary>
+        /// 仓储层命名空间
+        /// </summary>
+        public string RepositoryNamespace { get; set; }
+
+        /// <summary>
+        /// 服务接口命名空间
+        /// </summary>
+        public string IServicesNamespace { get; set; }
+
+        /// <summary>
+        /// 服务命名空间
+        /// </summary>
+        public string ServicesNamespace { get; set; }
     }
 }

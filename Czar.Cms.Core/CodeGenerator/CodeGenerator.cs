@@ -53,7 +53,13 @@ namespace Czar.Cms.Core.CodeGenerator
             {
                 foreach(var table in tables)
                 {
+                    //生成实体
                     GenerateEntity(table, coveredExsited);
+                    if (table.Columns.Any(c => c.PrimaryKey))
+                    {
+                        var keyType = table.Columns.First(m => m.PrimaryKey).CSharpType;
+                        GenerateIRepository(table, keyType, coveredExsited);
+                    }
                 }
             }
         }
@@ -132,7 +138,7 @@ namespace Czar.Cms.Core.CodeGenerator
                 {
                     sb.AppendLine($"\t\t[MaxLength({column.ColumnLength.Value})]");
                 }
-                var colType = column.ColumnType;
+                var colType = column.CSharpType;
                 if (colType.ToLower() != "string" && colType.ToLower() != "byte[]" && colType.ToLower() != "object" && column.Nullable)
                 {
                     colType += "?";
@@ -140,6 +146,28 @@ namespace Czar.Cms.Core.CodeGenerator
                 sb.AppendLine($"\t\tpublic {colType} {column.ColName}" + " { get; set;}");
             }
             return sb.ToString();
+        }
+
+        private void GenerateIRepository(DbTable table,string keyTypeName,bool CoveredExist = true)
+        {
+            string IRepositoryPath = _option.OutputPath + Delimiter + "Repository";
+            if (!Directory.Exists(IRepositoryPath))
+            {
+                Directory.CreateDirectory(IRepositoryPath);
+            }
+            var fullPath = IRepositoryPath + Delimiter + "I" + table.TableName + "Repository.cs";
+            if (File.Exists(fullPath) && !CoveredExist)
+                return;
+            var sb = new StringBuilder();
+            //读取模板
+            var content = ReadTemplate("IRepositoryTemplate.txt");
+            content = content.Replace("{GeneratorTime}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))
+                .Replace("{IRepositoryNamespace}", _option.IRepositoryNamespace)
+                .Replace("{ModelName}", table.TableName)
+                .Replace("{Comment}", table.TableComment)
+                .Replace("{Author}", _option.Author)
+                .Replace("{KeyTypeName}", keyTypeName);
+            WriteAndSave(fullPath, content);
         }
 
         /// <summary>

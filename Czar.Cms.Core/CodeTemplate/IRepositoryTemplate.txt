@@ -6,24 +6,30 @@
 *│　创建时间：{GeneratorTime}                            
 *└──────────────────────────────────────────────────────────────┘
 *┌──────────────────────────────────────────────────────────────┐
-*│　命名空间: {ModelsNamespace}                                  
-*│　类    名：{ModelName}                                     
+*│　命名空间: {IRepositoryNamespace}                                  
+*│　接口名称：I{ModelName}Repository                                     
 *└──────────────────────────────────────────────────────────────┘
 */
+using Czar.Cms.Core.Repository;
+using Czar.Cms.Models;
 using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Threading.Tasks;
 
-namespace {ModelsNamespace}
+namespace {IRepositoryNamespace}
 {
-	/// <summary>
-	/// {Author}
-	/// {GeneratorTime}
-	/// {Comment}
-	/// </summary>
-	[Table("{ModelName}")]
-	public class {ModelName}
+	public interface I{ModelName}Repository:IBaseRepository<{ModelName},{KeyTypeName}>
 	{
-{ModelProperties}
+		/// <summary>
+        /// 逻辑删除返回影响的行数
+        /// </summary>
+        /// <param name="ids">需要删除的主键数组</param>
+        /// <returns>影响的行数</returns>
+        Int32 DeleteLogical(Int32[] ids);
+        /// <summary>
+        /// 逻辑删除返回影响的行数（异步操作）
+        /// </summary>
+        /// <param name="ids">需要删除的主键数组</param>
+        /// <returns>影响的行数</returns>
+        Task<Int32> DeleteLogicalAsync(Int32[] ids);
 	}
 }
