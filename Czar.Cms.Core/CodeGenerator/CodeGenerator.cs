@@ -53,7 +53,14 @@ namespace Czar.Cms.Core.CodeGenerator
             {
                 foreach(var table in tables)
                 {
+                    //生成实体
                     GenerateEntity(table, coveredExsited);
+                    if (table.Columns.Any(c => c.PrimaryKey))
+                    {
+                        var keyType = table.Columns.First(m => m.PrimaryKey).CSharpType;
+                        GenerateIRepository(table, keyType, coveredExsited);
+                        //GenerateRepository(table, keyType, coveredExsited);
+                    }
                 }
             }
         }
@@ -132,7 +139,7 @@ namespace Czar.Cms.Core.CodeGenerator
                 {
                     sb.AppendLine($"\t\t[MaxLength({column.ColumnLength.Value})]");
                 }
-                var colType = column.ColumnType;
+                var colType = column.CSharpType;
                 if (colType.ToLower() != "string" && colType.ToLower() != "byte[]" && colType.ToLower() != "object" && column.Nullable)
                 {
                     colType += "?";
@@ -140,6 +147,61 @@ namespace Czar.Cms.Core.CodeGenerator
                 sb.AppendLine($"\t\tpublic {colType} {column.ColName}" + " { get; set;}");
             }
             return sb.ToString();
+        }
+
+        /// <summary>
+        /// 仓租接口代码
+        /// </summary>
+        /// <param name="table">表名</param>
+        /// <param name="keyTypeName">主键</param>
+        /// <param name="CoveredExist">覆盖</param>
+        private void GenerateIRepository(DbTable table,string keyTypeName,bool coveredExist = true)
+        {
+            string IRepositoryPath = _option.OutputPath + Delimiter + "IRepository";
+            if (!Directory.Exists(IRepositoryPath))
+            {
+                Directory.CreateDirectory(IRepositoryPath);
+            }
+            var fullPath = IRepositoryPath + Delimiter + "I" + table.TableName + "Repository.cs";
+            if (File.Exists(fullPath) && !coveredExist)
+                return;
+            var sb = new StringBuilder();
+            //读取模板
+            var content = ReadTemplate("IRepositoryTemplate.txt");
+            content = content.Replace("{GeneratorTime}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))
+                .Replace("{IRepositoryNamespace}", _option.IRepositoryNamespace)
+                .Replace("{ModelName}", table.TableName)
+                .Replace("{Comment}", table.TableComment)
+                .Replace("{Author}", _option.Author)
+                .Replace("{KeyTypeName}", keyTypeName);
+            WriteAndSave(fullPath, content);
+        }
+
+        /// <summary>
+        /// 仓储层代码
+        /// </summary>
+        /// <param name="table"></param>
+        /// <param name="keyTypeName"></param>
+        /// <param name="coveredExist"></param>
+        private void GenerateRepository(DbTable table,string keyTypeName,bool coveredExist = true)
+        {
+            string RepositoryPath = _option.OutputPath + Delimiter + "Repository";
+            if (!Directory.Exists(RepositoryPath))
+            {
+                Directory.CreateDirectory(RepositoryPath);
+            }
+            var fullPath = RepositoryPath + Delimiter + table.TableName + "Repository.cs";
+            if (File.Exists(fullPath) && !coveredExist)
+                return;
+            var sb = new StringBuilder();
+            var content = ReadTemplate("RepositoryTemplate.txt");
+            content = content.Replace("{GeneratorTime}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))
+                .Replace("{Author}", _option.Author)
+                .Replace("{Comment}", table.TableComment)
+                .Replace("{RepositoryNamespace}", _option.RepositoryNamespace)
+                .Replace("{ModelName}", table.TableName)
+                .Replace("{KeyTypeName}", keyTypeName);
+            WriteAndSave(content, fullPath);
         }
 
         /// <summary>

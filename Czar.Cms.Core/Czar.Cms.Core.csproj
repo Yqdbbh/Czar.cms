@@ -8,16 +8,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="CodeTemplate\IRepositoryTemplate.txt" />
     <None Remove="CodeTemplate\ModelTemplate.txt" />
+    <None Remove="CodeTemplate\RepositoryTemplate.txt" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="CodeTemplate\IRepositoryTemplate.txt" />
     <EmbeddedResource Include="CodeTemplate\ModelTemplate.txt" />
+    <EmbeddedResource Include="CodeTemplate\RepositoryTemplate.txt" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Dapper" Version="1.60.1" />
-    <PackageReference Include="Dapper.SimpleCRUD" Version="2.1.0" />
+    <PackageReference Include="Dapper.SimpleCRUD" Version="2.0.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.1.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="2.2.0" />

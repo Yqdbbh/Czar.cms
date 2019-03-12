@@ -17,11 +17,11 @@ namespace Czar.Cms.Core.Repository
     {
         protected DbOption _dbOption;
         protected IDbConnection _dbConnection;
-        
+
         public int Delete(TKey id) => _dbConnection.Delete<T>(id);
 
         public int Delete(T entity) => _dbConnection.Delete<T>(entity);
-        
+
         public async Task<int> DeleteAsync(TKey id)
         {
             return await _dbConnection.DeleteAsync<T>(id);
@@ -32,7 +32,7 @@ namespace Czar.Cms.Core.Repository
             return await _dbConnection.DeleteAsync<T>(entity);
         }
 
-        public int DeleteList(object whereConditions, IDbTransaction transaction = null, int? commandTimeout = null) 
+        public int DeleteList(object whereConditions, IDbTransaction transaction = null, int? commandTimeout = null)
         {
             return _dbConnection.DeleteList<T>(whereConditions, transaction, commandTimeout);
         }
