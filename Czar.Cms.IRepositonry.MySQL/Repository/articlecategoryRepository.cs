@@ -31,7 +31,6 @@ namespace Czar.Cms.Repository.SqlServer
             {
                 throw new ArgumentNullException(nameof(DbOption));
             }
-            Dapper.SimpleCRUD.SetDialect(SimpleCRUD.Dialect.MySQL);
             _dbConnection = DbConnectionFactory.CreateConnection(_dbOption.DbType, _dbOption.ConnectionString);
         }
 

@@ -23,7 +23,6 @@ namespace Czar.Cms.Core.CodeGenerator
         {
             if (options == null)
                 throw new ArgumentNullException(nameof(options));
-            _option = options.Value;
             if (_option.ConnectionString.IsNullOrWhiteSpace())
                 throw new ArgumentNullException("数据库连接串未指定");
             if (_option.DbType.IsNullOrWhiteSpace())

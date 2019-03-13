@@ -1,6 +1,7 @@
 ﻿using Czar.Cms.Core.Models;
 using Czar.Cms.Core.Extensions;
 using System;
+using Dapper;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
@@ -28,7 +29,9 @@ namespace Czar.Cms.Core.DbHelper
             switch (dbType)
             {
                 case DatabaseType.MySQL:
-                    dbConnection= new MySqlConnection(connectionStr);
+                    //使用的Dapper.SimpleCRUD, 默认数据库格式是sqlserver
+                    SimpleCRUD.SetDialect(SimpleCRUD.Dialect.MySQL);
+                    dbConnection = new MySqlConnection(connectionStr);
                     break;
                 default:
                     throw new ArgumentException($"不支持的数据库类型:{dbType.ToString()}");
