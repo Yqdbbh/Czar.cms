@@ -23,6 +23,7 @@ namespace Czar.Cms.Core.CodeGenerator
         {
             if (options == null)
                 throw new ArgumentNullException(nameof(options));
+            _option = options.Value;
             if (_option.ConnectionString.IsNullOrWhiteSpace())
                 throw new ArgumentNullException("数据库连接串未指定");
             if (_option.DbType.IsNullOrWhiteSpace())
@@ -60,6 +61,8 @@ namespace Czar.Cms.Core.CodeGenerator
                         GenerateIRepository(table, keyType, coveredExsited);
                         GenerateRepository(table, keyType, coveredExsited);
                     }
+                    GenerateIService(table, coveredExsited);
+                    GenerateService(table, coveredExsited);
                 }
             }
         }
@@ -200,6 +203,52 @@ namespace Czar.Cms.Core.CodeGenerator
                 .Replace("{RepositoryNamespace}", _option.RepositoryNamespace)
                 .Replace("{ModelName}", table.TableName)
                 .Replace("{KeyTypeName}", keyTypeName);
+            WriteAndSave(fullPath, content);
+        }
+
+        /// <summary>
+        /// 服务接口代码
+        /// </summary>
+        /// <param name="table"></param>
+        /// <param name="coveredExist"></param>
+        private void GenerateIService(DbTable table,bool coveredExist = true)
+        {
+            string spath = _option.OutputPath + Delimiter + "IServices";
+            if (!Directory.Exists(spath))
+                Directory.CreateDirectory(spath);
+            var fullPath = spath + Delimiter + "I" + table.TableName + "IService.cs";
+            if (File.Exists(fullPath) && !coveredExist)
+                return;
+            var sb = new StringBuilder();
+            var content = ReadTemplate("IServicesTemplate.txt");
+             content = content.Replace("{Comment}", table.TableComment)
+                .Replace("{Author}", _option.Author)
+                .Replace("{GeneratorTime}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))
+                .Replace("{IServicesNamespace}", _option.IServicesNamespace)
+                .Replace("{ModelName}",table.TableName);
+            WriteAndSave(fullPath, content);
+        }
+
+        /// <summary>
+        /// 服务层代码
+        /// </summary>
+        /// <param name="table"></param>
+        /// <param name="coveredExist"></param>
+        private void GenerateService(DbTable table,bool coveredExist = true)
+        {
+            string spath = _option.OutputPath + Delimiter + "Service";
+            if (!Directory.Exists(spath))
+                Directory.CreateDirectory(spath);
+            var fullPath = spath + Delimiter +table.TableName+ "Service.cs";
+            if (File.Exists(fullPath) && !coveredExist)
+                return;
+            var sb = new StringBuilder();
+            var content = ReadTemplate("ServiceTemplate.txt");
+            content = content.Replace("{GeneratorTime}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))
+                .Replace("{Comment}", table.TableComment)
+                .Replace("{Author}", _option.Author)
+                .Replace("{ModelName}", table.TableName)
+                .Replace("{ServicesNamespace}", _option.ServicesNamespace);
             WriteAndSave(fullPath, content);
         }
 
