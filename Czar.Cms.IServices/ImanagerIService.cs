@@ -18,5 +18,6 @@ namespace Czar.Cms.IServices
 {
     public interface ImanagerService
     {
+
     }
 }

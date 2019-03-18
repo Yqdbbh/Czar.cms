@@ -6,10 +6,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="appsettings.json" />
     <Content Remove="Views\Shared\layuicms_layout.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Alexinea.Autofac.Extensions.DependencyInjection" Version="4.2.0" />
+    <PackageReference Include="Autofac" Version="4.9.1" />
+    <PackageReference Include="AutoMapper" Version="8.0.0" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="FluentValidation" Version="8.1.3" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
@@ -21,6 +33,14 @@
 
   <ItemGroup>
     <None Include="Views\Shared\layuicms_layout.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Czar.Cms.Core\Czar.Cms.Core.csproj" />
+    <ProjectReference Include="..\Czar.Cms.IRepositonry.MySQL\Czar.Cms.IRepositonry.MySQL.csproj" />
+    <ProjectReference Include="..\Czar.Cms.IServices\Czar.Cms.IServices.csproj" />
+    <ProjectReference Include="..\Czar.Cms.Services\Czar.Cms.Services.csproj" />
+    <ProjectReference Include="..\Czar.Cms.ViewModels\Czar.Cms.ViewModels.csproj" />
   </ItemGroup>
 
 </Project>

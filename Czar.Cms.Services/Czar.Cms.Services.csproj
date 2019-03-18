@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Czar.Cms.IRepositonry\Czar.Cms.IRepositonry.csproj" />
+    <ProjectReference Include="..\Czar.Cms.IServices\Czar.Cms.IServices.csproj" />
   </ItemGroup>
 
 </Project>
