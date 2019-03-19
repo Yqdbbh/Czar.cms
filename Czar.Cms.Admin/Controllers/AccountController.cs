@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Czar.Cms.Admin.Validation;
+using Czar.Cms.Core.Extensions;
 using Czar.Cms.Core.Helper;
 using Czar.Cms.IServices;
 using Czar.Cms.ViewModels;
@@ -81,6 +82,9 @@ namespace Czar.Cms.Admin.Controllers
                 result.ResultMsg = results.ToString("||");
             }
             #endregion
+
+            model.Ip = HttpContext.GetClientUserIp();
+            var manager = _servie.SignIn(model);
 
             return null;
         }
