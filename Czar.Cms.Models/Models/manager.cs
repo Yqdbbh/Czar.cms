@@ -54,17 +54,17 @@ namespace Czar.Cms.Models
 		[Key]
 		public Int32 Id{ get; set;}
 
-		/// <summary>
-		/// 是否删除
-		/// <summary>
-		[Required]
-		public Int64 ISDELETE { get; set;}
+        /// <summary>
+        /// 是否删除
+        /// <summary>
+        [Required]
+        public bool ISDELETE { get; set; } = false;
 
-		/// <summary>
-		/// 是否锁定
-		/// <summary>
-		[Required]
-		public Int64 ISLOCK { get; set;}
+        /// <summary>
+        /// 是否锁定
+        /// <summary>
+        [Required]
+        public bool ISLOCK { get; set; } = false;
 
 		/// <summary>
 		/// 登录次数

@@ -32,11 +32,29 @@ namespace Czar.Cms.IServices
         /// <param name="item">新增或修改视图实体</param>
         /// <returns>结果实体</returns>
         BaseResult AddOrModify(ManagerAddOrModifyModel item);
-
+        /// <summary>
+        /// 批量删除
+        /// </summary>
+        /// <param name="Ids"></param>
+        /// <returns></returns>
         BaseResult DeleteIds(int[] Ids);
-
-        //BaseResult ChangeLockStatus()
-
+        /// <summary>
+        /// 改变锁定状态
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        BaseResult ChangeLockStatus(ChangeStatusModel model);
+        /// <summary>
+        /// 登录操作
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         manager SignIn(LoginModel model);
+        /// <summary>
+        /// 修改密码
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        BaseResult ChangePassword(ChangePasswordModel model);
     }
 }

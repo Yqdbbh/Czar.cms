@@ -10,10 +10,14 @@
 *│　类    名： managerService                                    
 *└──────────────────────────────────────────────────────────────┘
 */
+using AutoMapper;
 using Czar.Cms.IRepository;
 using Czar.Cms.IServices;
+using Czar.Cms.Models;
+using Czar.Cms.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Czar.Cms.Services
@@ -22,9 +26,159 @@ namespace Czar.Cms.Services
     {
         private readonly ImanagerRepository _repository;
 
-        public managerService(ImanagerRepository repository)
+        private readonly ImanagerroleRepository _roleRepository;
+
+        private readonly IMapper _mapper;
+
+        private readonly ImanagerlogRepository _logRepository;
+
+        public managerService(ImanagerRepository repository,ImanagerroleRepository roleRepository,IMapper mapper,ImanagerlogRepository logRepository)
         {
             _repository = repository;
+            _roleRepository = roleRepository;
+            _mapper = mapper;
+            _logRepository = logRepository;
+        }
+
+        public BaseResult AddOrModify(ManagerAddOrModifyModel item)
+        {
+            var result = new BaseResult();
+            manager manager;
+            if (item.Id == 0)
+            {
+                //TODO  Add
+                manager = _mapper.Map<manager>(item);
+                manager.PASSWORD = "123456";
+                manager.LOGINCOUNT = 0;
+                manager.ADDMANAGERID = 1;
+                manager.ISDELETE = false;
+                manager.ADDTIME = DateTime.Now;
+                if (_repository.Insert(manager) > 0)
+                {
+                    result.ResultCode = ResultCodeAddMsgKey.CommonObjectSuccessCode;
+                    result.ResultMsg = ResultCodeAddMsgKey.CommonObjectSuccessMsg;
+                }
+                else
+                {
+                    result.ResultCode = ResultCodeAddMsgKey.CommonExceptionCode;
+                    result.ResultMsg = ResultCodeAddMsgKey.CommonExceptionMsg;
+                }
+            }
+            else
+            {
+                //TODO Modify
+                manager = _repository.Get(item.Id);
+                if(manager!=null)
+                {
+                    _mapper.Map(item, manager);
+                    manager.MODIFYMANAGERID = 1;
+                    manager.MODIFYTIME = DateTime.Now;
+                    if (_repository.Update(manager) > 0)
+                    {
+                        result.ResultCode = ResultCodeAddMsgKey.CommonObjectSuccessCode;
+                        result.ResultMsg = ResultCodeAddMsgKey.CommonObjectSuccessMsg;
+                    }
+                    else
+                    {
+                        result.ResultCode = ResultCodeAddMsgKey.CommonExceptionCode;
+                        result.ResultMsg = ResultCodeAddMsgKey.CommonExceptionMsg;
+                    }
+                }
+                else
+                {
+                    result.ResultCode = ResultCodeAddMsgKey.CommonFailNoDataCode;
+                    result.ResultMsg = ResultCodeAddMsgKey.CommonFailNoDataMsg;
+                }
+            }
+            return result;
+        }
+
+        public BaseResult ChangeLockStatus(ChangeStatusModel model)
+        {
+            var result = new BaseResult();
+            var isLock = _repository.GetLockStatusById(model.Id);
+            if (isLock != model.Status)
+            {
+                var count = _repository.ChangeLockStatusById(model.Id, model.Status);
+                if (count > 0)
+                {
+                    result.ResultCode = ResultCodeAddMsgKey.CommonObjectSuccessCode;
+                    result.ResultMsg = ResultCodeAddMsgKey.CommonObjectSuccessMsg;
+                }
+                else
+                {
+                    result.ResultCode = ResultCodeAddMsgKey.CommonExceptionCode;
+                    result.ResultMsg = ResultCodeAddMsgKey.CommonExceptionMsg;
+                }
+            }
+            else
+            {
+                result.ResultCode = ResultCodeAddMsgKey.CommonDataStatusChangeCode;
+                result.ResultMsg = ResultCodeAddMsgKey.CommonDataStatusChangeMsg;
+            }
+            return result;
+        }
+
+        public BaseResult ChangePassword(ChangePasswordModel model)
+        {
+            BaseResult result = new BaseResult();
+            string oldPwd = _repository.GetPasswordById(model.Id);
+            if (oldPwd == "123456")
+            {
+                var count = _repository.ChangePasswordById(model.Id, "123456");
+                if (count > 0)
+                {
+                    result.ResultCode = ResultCodeAddMsgKey.CommonObjectSuccessCode;
+                    result.ResultMsg = ResultCodeAddMsgKey.CommonObjectSuccessMsg;
+                }
+                else
+                {
+                    result.ResultCode = ResultCodeAddMsgKey.CommonExceptionCode;
+                    result.ResultMsg = ResultCodeAddMsgKey.CommonExceptionMsg;
+                }
+            }
+            else
+            {
+                result.ResultCode = ResultCodeAddMsgKey.PasswordOldErrorCode;
+                result.ResultMsg = ResultCodeAddMsgKey.PasswordOldErrorMsg;
+            }
+            return result;
+        }
+
+        public BaseResult DeleteIds(int[] Ids)
+        {
+            var result = new BaseResult();
+            if (Ids.Count() == 0)
+            {
+                result.ResultCode = ResultCodeAddMsgKey.CommonModelStateInvalidCode;
+                result.ResultMsg = ResultCodeAddMsgKey.CommonModelStateInvalidMsg;
+            }
+            else
+            {
+                var count = _repository.DeleteLogical(Ids);
+                if (count > 0)
+                {
+                    result.ResultCode = ResultCodeAddMsgKey.CommonObjectSuccessCode;
+                    result.ResultMsg = ResultCodeAddMsgKey.CommonObjectSuccessMsg;
+                }
+                else
+                {
+                    result.ResultCode = ResultCodeAddMsgKey.CommonExceptionCode;
+                    result.ResultMsg = ResultCodeAddMsgKey.CommonExceptionMsg;
+                }
+
+            }
+            return result;
+        }
+
+        public TableDataModel LoadData(ManagerRequestModel model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public manager SignIn(LoginModel model)
+        {
+            throw new NotImplementedException();
         }
     }
 }
