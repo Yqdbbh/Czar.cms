@@ -11,6 +11,7 @@
 *└──────────────────────────────────────────────────────────────┘
 */
 using AutoMapper;
+using Czar.Cms.Core.Extensions;
 using Czar.Cms.IRepository;
 using Czar.Cms.IServices;
 using Czar.Cms.Models;
@@ -173,12 +174,50 @@ namespace Czar.Cms.Services
 
         public TableDataModel LoadData(ManagerRequestModel model)
         {
-            throw new NotImplementedException();
+            string conditions = "where IsDelete=0 ";
+            if (!model.Key.IsNullOrWhiteSpace())
+            {
+                conditions += $" and (username like '%@Key%' or NickName like '%@Key%' or Remark like '%@Key%' or Mobile like '%@Key%' or Email like '%@Key%')";
+            }
+            var list = _repository.GetListPaged(model.Page, model.Limit, conditions, " Id desc", model).ToList();
+            var viewList = new List<ManagerListModel>();
+            list.ForEach(x =>
+            {
+                var item = _mapper.Map<ManagerListModel>(x);
+                item.RoleName = _roleRepository.GetNameById(x.ROLEID);
+                viewList.Add(item);
+            });
+            return new TableDataModel
+            {
+                count = _repository.RecordCount(conditions),
+                data = viewList
+            };
         }
 
         public manager SignIn(LoginModel model)
         {
-            throw new NotImplementedException();
+            model.Password = "123456";
+            model.UserName = model.UserName.Trim();
+            string condition = " where IsDelete=0 ";//未被删除的数据
+            condition += $" and (UserName=@UserName or Mobile=@UserName or Email=@UserName ) and Password=@Password ";
+            var manager = _repository.GetList(condition, model).FirstOrDefault();
+            if (manager != null)
+            {
+                manager.LOGINLASTIP = model.Ip;
+                manager.LOGINLASTTIME = DateTime.Now;
+                manager.LOGINCOUNT += 1;
+                _repository.Update(manager);
+                _logRepository.Insert(new managerlog()
+                {
+                    ACTIONTYPE = CzarCmsEnums.ActionEnum.Sign.ToString(),
+                    ADDMANAGEID = manager.Id,
+                    ADDMANAGERNICKNAME = manager.NICKNAME,
+                    ADDTIME = DateTime.Now,
+                    ADDIP=model.Ip,
+                    REMARK="用户登录"
+                });
+            }
+            return manager;
         }
     }
 }

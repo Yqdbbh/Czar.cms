@@ -95,7 +95,7 @@ namespace Czar.Cms.Core.Repository
         /// <param name="conditions"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        int RecordCount(string conditions, object parameters);
+        int RecordCount(string conditions="", object parameters=null);
         #endregion
 
         #region 异步
@@ -180,7 +180,7 @@ namespace Czar.Cms.Core.Repository
         /// <param name="conditions"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        Task<int> RecordCountAsync(string conditions, object parameters);
+        Task<int> RecordCountAsync(string conditions="", object parameters=null);
 
 
         #endregion

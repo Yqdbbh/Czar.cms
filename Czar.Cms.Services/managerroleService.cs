@@ -10,8 +10,11 @@
 *│　类    名： managerroleService                                    
 *└──────────────────────────────────────────────────────────────┘
 */
+using AutoMapper;
 using Czar.Cms.IRepository;
 using Czar.Cms.IServices;
+using Czar.Cms.Models;
+using Czar.Cms.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -21,10 +24,36 @@ namespace Czar.Cms.Services
     public class managerroleService: ImanagerroleService
     {
         private readonly ImanagerroleRepository _repository;
-
-        public managerroleService(ImanagerroleRepository repository)
+        private readonly IMapper _mapper;
+        public managerroleService(ImanagerroleRepository repository,IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
+        }
+
+        public BaseResult AddOrModify(ManagerRoleAddOrModifyModel item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public BaseResult DeleteIds(string[] ids)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<managerrole> GetListByCondition(ManagerRoleRequestModel model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<MenuNavView> GetMenusByRoleId(int roleId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public TableDataModel LoadData(ManagerRoleRequestModel model)
+        {
+            throw new NotImplementedException();
         }
     }
 }

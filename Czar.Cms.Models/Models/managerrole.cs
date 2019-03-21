@@ -83,6 +83,9 @@ namespace Czar.Cms.Models
 		[Required]
 		public Int32 ROLETYPE { get; set;}
 
-
-	}
+        /// <summary>
+        /// 菜单ID数组  
+        /// </summary>
+        public virtual int[] MenuIds { get; set; }
+    }
 }
